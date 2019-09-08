@@ -22,7 +22,7 @@
 <dt><a href="#loadingReducer">loadingReducer(state, payload)</a></dt>
 <dd><p>Handles setting loading state when fetching</p>
 </dd>
-<dt><a href="#silentSuccessReducer">silentSuccessReducer(state, payload)</a></dt>
+<dt><a href="#notLoadingReducer">notLoadingReducer(state, payload)</a></dt>
 <dd><p>Handles unsetting loading state without manipulate other aspects of state</p>
 </dd>
 <dt><a href="#setCurrent">setCurrent(state, payload)</a></dt>
@@ -143,9 +143,9 @@ Handles setting loading state when fetching
 | state | <code>\*</code> | Mutable draft state from immer |
 | payload | <code>\*</code> | Action payload |
 
-<a name="silentSuccessReducer"></a>
+<a name="notLoadingReducer"></a>
 
-## silentSuccessReducer(state, payload)
+## notLoadingReducer(state, payload)
 Handles unsetting loading state without manipulate other aspects of state
 
 **Kind**: global function  

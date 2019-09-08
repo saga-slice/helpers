@@ -6,7 +6,7 @@
 refresh a resource after an association or other out of context action.
 This function is debounced by 100ms default to prevent api spam.</p>
 </dd>
-<dt><a href="#crudSaga">crudSaga(singular, plural)</a> ⇒ <code>function</code></dt>
+<dt><a href="#crudSaga">crudSaga(options, extend)</a> ⇒ <code>function</code></dt>
 <dd><p>Creates crud saga boilerplate clojure for sagas slice</p>
 </dd>
 </dl>
@@ -40,7 +40,7 @@ createModule({
 ```
 <a name="crudSaga"></a>
 
-## crudSaga(singular, plural) ⇒ <code>function</code>
+## crudSaga(options, extend) ⇒ <code>function</code>
 Creates crud saga boilerplate clojure for sagas slice
 
 **Kind**: global function  
@@ -48,8 +48,11 @@ Creates crud saga boilerplate clojure for sagas slice
 
 | Param | Type | Description |
 | --- | --- | --- |
-| singular | <code>string</code> | Singular resource name |
-| plural | <code>string</code> | Plural resource name |
+| options | <code>object</code> | Options to pass to saga helper |
+| options.singular | <code>string</code> | Singular resource name |
+| options.plural | <code>string</code> | Plural resource name |
+| options.plural | <code>string</code> | Plural resource name |
+| extend | <code>function</code> | A function to pass actions and add extra sagas |
 
 **Example**  
 ```js
