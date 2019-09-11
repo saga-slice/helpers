@@ -8,3 +8,4 @@ docs:
 	@ ${jsdoc2md} lib/sagaHelpers.js > docs/sagaHelpers.md
 	@ ${jsdoc2md} lib/reducerHelpers.js > docs/reducerHelpers.md
 	@ ${jsdoc2md} lib/api/index.js > docs/api.md
+	@ ${jsdoc2md} ./index.js > docs/crudSlice.md
