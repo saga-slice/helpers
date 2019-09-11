@@ -3,7 +3,7 @@
   "version": "0.1.10",
   "description": "Opinionated helpers for working with saga-slice library",
   "scripts": {
-    "test": "jest --passWithNoTests",
+    "test": "jest --passWithNoTests --runInBand",
     "tdd": "npm run test -- --watch",
     "rollup": "rollup -c",
     "lint": "eslint lib",
