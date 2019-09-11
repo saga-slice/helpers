@@ -19,6 +19,29 @@ import { crudReducers, crudInitialState } from './lib/reducerHelpers';
  *
  * @example
  *
+ * export default crudSlice({
+ *      name: 'todos',
+ *      singular: 'todo',
+ *      plural: 'todos',
+ *      sagaApi: createApis({ baseURL: '/api' }).sagaApi,
+ *      initialState: { done: [], incomplete: [] },
+ *      reducers: {
+ *          setByStatus: (state, todos) => {
+ *              state.done = todos.filter(t => t.status === 'done');
+ *              state.incomplete = todos.filter(t => t.status === 'incomplete');
+ *          }
+ *      },
+ *      sagas: (A) => {
+ *          readAllDone: {
+ *              saga* ({ payload: { data } }) {
+ *                  if (data) {
+ *                      yield put(A.setByStatus(Object.values(data)));
+ *                  }
+ *              }
+ *          }
+ *      }
+ * })
+ *
  */
 export const crudSlice = (opts) => {
 
