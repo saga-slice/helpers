@@ -20,6 +20,8 @@ cancel the previous request before calling again.</p>
 <dd></dd>
 <dt><a href="#put">put(path, payload, options)</a></dt>
 <dd></dd>
+<dt><a href="#patch">patch(path, payload, options)</a></dt>
+<dd></dd>
 <dt><a href="#post">post(path, payload, options)</a></dt>
 <dd></dd>
 <dt><a href="#delete">delete(path, payload, options)</a></dt>
@@ -84,6 +86,17 @@ https://github.com/redux-saga/redux-saga/issues/651#issuecomment-262375964
 <a name="put"></a>
 
 ## put(path, payload, options)
+**Kind**: global function  
+
+| Param | Description |
+| --- | --- |
+| path | Request URL path |
+| payload | Request payload |
+| options | Axios options |
+
+<a name="patch"></a>
+
+## patch(path, payload, options)
 **Kind**: global function  
 
 | Param | Description |

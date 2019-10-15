@@ -49,16 +49,6 @@ describe('saga slice helpers', () => {
             expect(() => crudSlice({ name })).toThrow('must provide a valid name');
         });
 
-        badRequiredStringValues.forEach(singular => {
-
-            expect(() => crudSlice({ name: 'yes', singular })).toThrow('must provide a valid singular CRUD route');
-        });
-
-        badRequiredStringValues.forEach(plural => {
-
-            expect(() => crudSlice({ name: 'yes', singular: 'yes', plural })).toThrow('must provide a valid plural CRUD route');
-        });
-
         // remove object
         badRequiredStringValues.pop();
         const badRequiredObjectValues = badRequiredStringValues;
@@ -67,8 +57,6 @@ describe('saga slice helpers', () => {
 
             expect(() => crudSlice({
                 name: 'yes',
-                singular: 'yes',
-                plural: 'yesses',
                 sagaApi
             })).toThrow('must provide a valid sagaApi');
         });
@@ -79,8 +67,6 @@ describe('saga slice helpers', () => {
 
             expect(() => crudSlice({
                 name: 'yes',
-                singular: 'yes',
-                plural: 'yesses',
                 sagaApi: {},
                 reducers
             })).toThrow('reducers must be an object');
@@ -90,11 +76,24 @@ describe('saga slice helpers', () => {
 
             expect(() => crudSlice({
                 name: 'yes',
-                singular: 'yes',
-                plural: 'yesses',
                 sagaApi: {},
                 initialState
             })).toThrow('initialState must be an object');
+        });
+
+        badOptionalObjectValues.forEach(takers => {
+
+            // takers can be a string
+            if (typeof takers === 'string') {
+                return;
+            }
+
+            expect(() => crudSlice({
+                name: 'yes',
+                sagaApi: {},
+                initialState: {},
+                takers
+            })).toThrow('takers must be an object or "takeEvery"');
         });
 
         const badOptionalFunctionValues = badRequiredStringValues.filter(v => !!v && typeof v !== 'function');
@@ -104,8 +103,6 @@ describe('saga slice helpers', () => {
 
             expect(() => crudSlice({
                 name: 'yes',
-                singular: 'yes',
-                plural: 'yesses',
                 sagaApi: {},
                 sagas
             })).toThrow('sagas must be a function');
@@ -116,8 +113,6 @@ describe('saga slice helpers', () => {
 
         const slice = crudSlice({
             name: 'test',
-            singular: 'test',
-            plural: 'test',
             sagaApi: {}
         });
 
@@ -150,8 +145,6 @@ describe('saga slice helpers', () => {
 
         const slice = crudSlice({
             name: 'test',
-            singular: 'test',
-            plural: 'test',
             sagaApi: {},
             reducers: {
                 test: () => {},
@@ -168,8 +161,6 @@ describe('saga slice helpers', () => {
 
         expect(() => crudSlice({
             name: 'test',
-            singular: 'test',
-            plural: 'test',
             sagaApi: {},
             initialState: { test: true }
         })).not.toThrow();
@@ -179,10 +170,26 @@ describe('saga slice helpers', () => {
 
         expect(() => crudSlice({
             name: 'test',
-            singular: 'test',
-            plural: 'test',
             sagaApi: {},
             sagas: () => ({ test: () => {} })
+        })).not.toThrow();
+    });
+
+    test('should not throw when passed takers', () => {
+
+        expect(() => crudSlice({
+            name: 'test',
+            sagaApi: {},
+            takers: {
+                readAll: () => {}
+            }
+        })).not.toThrow();
+
+
+        expect(() => crudSlice({
+            name: 'test',
+            sagaApi: {},
+            takers: 'takeLatest'
         })).not.toThrow();
     });
 });
