@@ -49,14 +49,22 @@ Creates crud saga boilerplate clojure for sagas slice
 | Param | Type | Description |
 | --- | --- | --- |
 | options | <code>object</code> | Options to pass to saga helper |
-| options.singular | <code>string</code> | Singular resource name |
-| options.plural | <code>string</code> | Plural resource name |
-| options.plural | <code>string</code> | Plural resource name |
+| options.name | <code>string</code> | REST resource name |
+| options.takers | <code>string</code> | Optional object of takers (defaults to `takeEvery`). Can be string `takeLatest`. |
+| options.sagaApi | <code>string</code> | A `sagaApi` instance |
 | extend | <code>function</code> | A function to pass actions and add extra sagas |
 
 **Example**  
 ```js
-const sagas = crudSaga('todo', 'todos', (A) => ({
+const opts = {
+     sagaApi,
+     name: 'users',
+     takers: {
+         readAll: takeLatest
+     }
+}
+
+const sagas = crudSaga(opts, (A) => ({
      [A.assignToUser]: {
          * saga({ payload }) {
              // do stuff

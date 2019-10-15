@@ -48,32 +48,30 @@ export const crudSlice = (opts) => {
     const {
         name,
         initialState,
-        singular,
-        plural,
         reducers,
         sagas,
-        sagaApi
+        sagaApi,
+        takers
     } = opts;
 
     // Required
     assert(!!name && name.constructor === String, 'must provide a valid name');
-    assert(!!singular && singular.constructor === String, 'must provide a valid singular CRUD route');
-    assert(!!plural && plural.constructor === String, 'must provide a valid plural CRUD route');
     assert(!!sagaApi && sagaApi.constructor === Object, 'must provide a valid sagaApi');
 
     // Optional
     assert(!reducers || (reducers && reducers.constructor === Object), 'reducers must be an object');
     assert(!initialState || (initialState && initialState.constructor === Object), 'initialState must be an object');
     assert(!sagas || (sagas && sagas.constructor === Function), 'sagas must be a function');
+    assert(!takers || (takers && [Object, String].includes(takers.constructor)), 'takers must be an object or "takeEvery"');
 
     return createModule({
         name,
         initialState: crudInitialState(initialState || {}),
         reducers: crudReducers(reducers || {}),
         sagas: crudSaga({
+            name,
             sagaApi,
-            singular,
-            plural
+            takers
         }, sagas)
     });
 };

@@ -10,6 +10,9 @@
 <dt><a href="#put">put</a></dt>
 <dd><p>Wrapper for makeCall.bind(makeCall, instance, &#39;put&#39;),</p>
 </dd>
+<dt><a href="#patch">patch</a></dt>
+<dd><p>Wrapper for makeCall.bind(makeCall, instance, &#39;patch&#39;),</p>
+</dd>
 <dt><a href="#delete">delete</a></dt>
 <dd><p>Wrapper for makeCall.bind(makeCall, instance, &#39;delete&#39;),</p>
 </dd>
@@ -56,6 +59,21 @@ Wrapper for makeCall.bind(makeCall, instance, 'post'),
 
 ## put
 Wrapper for makeCall.bind(makeCall, instance, 'put'),
+
+**Kind**: global variable  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| path | <code>string</code> | Request URL path |
+| payload | <code>\*</code> | Request payload |
+| successAction | <code>function</code> | Redux action to dispatch on success |
+| failAction | <code>function</code> | Redux action to dispatch on fail |
+| [doneAction] | <code>function</code> | Redux action to dispatch when completed |
+
+<a name="patch"></a>
+
+## patch
+Wrapper for makeCall.bind(makeCall, instance, 'patch'),
 
 **Kind**: global variable  
 
