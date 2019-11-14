@@ -6,6 +6,7 @@
     "test": "jest --passWithNoTests --runInBand",
     "tdd": "npm run test -- --watch",
     "lint": "eslint lib",
+    "build": "rollup -c",
     "docs": "rm -rf docs; make docs;"
   },
   "homepage": "https://github.com/damusix/saga-slice-helpers#readme",
@@ -22,7 +23,9 @@
     "url": "https://danilo.io"
   },
   "license": "MIT",
-  "main": "index.js",
+  "main": "dist/cjs.js",
+  "unpkg": "dist/umd.js",
+  "module": "dist/es.js",
   "keywords": [
     "redux",
     "react",
@@ -45,10 +48,17 @@
     "jsdoc-to-markdown": "^5.0.0",
     "redux": "^4.x.x",
     "redux-saga": "^1.x.x",
+    "rollup": "^1.27.0",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-replace": "^2.2.0",
+    "rollup-plugin-terser": "^5.1.2",
     "saga-slice": "^0.x.x"
   },
   "peerDependencies": {
-    "saga-slice": "^0.x.x"
+    "saga-slice": "^0.x.x",
+    "axios": "^0.x.x",
+    "redux-saga": "^1.x.x"
   },
   "eslintConfig": {
     "parser": "babel-eslint",
@@ -84,8 +94,8 @@
   },
   "config": {
     "ghooks": {
-      "pre-commit": "npm run lint; npm run docs; git add ./docs;",
-      "pre-push": "npm run test; npm version patch; sleep 1"
+      "pre-commit": "npm run lint",
+      "pre-push": "npm run test"
     }
   }
 }

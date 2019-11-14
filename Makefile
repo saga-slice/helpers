@@ -9,3 +9,20 @@ docs:
 	@ ${jsdoc2md} lib/reducerHelpers.js > docs/reducerHelpers.md
 	@ ${jsdoc2md} lib/api/index.js > docs/api.md
 	@ ${jsdoc2md} index.js > docs/crudSlice.md
+
+build:
+	@ npm run build
+
+test:
+	@ npm run lint
+	@ npm run test
+
+deploy:
+	@ make docs;
+	@ read -p 'Commit Message: ' commitMessage; \
+		git add .; \
+		git commit -am "$$commitMessage";
+	@ read -p 'Version Bump (major, minor, patch): ' versionBump; \
+		npm version $$versionBump;
+	@ npm publish;
+	@ git push origin master;
