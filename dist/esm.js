@@ -796,6 +796,7 @@ function makeCall(instance, method, path) {
       donePayload,
       _ref,
       data,
+      status,
       _args = arguments;
 
   return regeneratorRuntime.wrap(function makeCall$(_context) {
@@ -842,7 +843,7 @@ function makeCall(instance, method, path) {
           donePayload = {
             data: data
           };
-          _context.next = 26;
+          _context.next = 30;
           break;
 
         case 21:
@@ -852,20 +853,33 @@ function makeCall(instance, method, path) {
           return put(fail(_context.t0));
 
         case 25:
-          donePayload = {
-            error: _context.t0
-          };
-
-        case 26:
-          if (!done) {
+          if (!_context.t0.response) {
             _context.next = 29;
             break;
           }
 
+          status = _context.t0.response.status;
           _context.next = 29;
-          return put(done(donePayload));
+          return put({
+            type: "sagaApi/".concat(status),
+            payload: _context.t0.response
+          });
 
         case 29:
+          donePayload = {
+            error: _context.t0
+          };
+
+        case 30:
+          if (!done) {
+            _context.next = 33;
+            break;
+          }
+
+          _context.next = 33;
+          return put(done(donePayload));
+
+        case 33:
         case "end":
           return _context.stop();
       }
