@@ -1,0 +1,8 @@
+__test*
+lib
+.*
+index.js
+jest*
+Makefile
+rollup*
+tsconf*
