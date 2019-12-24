@@ -27,7 +27,6 @@ describe('saga slice helpers', () => {
                 'noop',
                 'crudInitialState',
                 'crudReducers',
-                'lifecycleReducers',
                 'createApis'
             ])
         );
