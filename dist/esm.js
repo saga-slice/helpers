@@ -1,6 +1,6 @@
 import assert from 'assert';
 import { createModule } from 'saga-slice';
-import { put, select, debounce, takeLatest, call } from 'redux-saga/effects';
+import { put, select, debounce, call } from 'redux-saga/effects';
 import { create, CancelToken } from 'axios';
 import { CANCEL } from 'redux-saga';
 
@@ -112,7 +112,7 @@ function refetch(A, name) {
 
             case 10:
               _context.next = 12;
-              return put(A.getOne({
+              return put(A.readOne({
                 payload: id
               }));
 
@@ -167,147 +167,120 @@ var crudSaga = function crudSaga() {
   var extend = arguments.length > 1 ? arguments[1] : undefined;
   var name = opts.name,
       sagaApi = opts.sagaApi;
-  var _opts$takers = opts.takers,
-      takers = _opts$takers === void 0 ? {} : _opts$takers;
   assert(!!name && name.constructor === String, 'options.name: the resource\'s REST name is required');
   assert(!!sagaApi && sagaApi.constructor === Object, 'options.sagaApi: API object is required');
-
-  if (takers === 'takeLatest') {
-    takers = ['readAll', 'readOne', 'create', 'update', 'patch', 'delete'].reduce(function (acc, cur) {
-      return _objectSpread2({}, acc, _defineProperty({}, cur, takeLatest));
-    }, {});
-  }
-
   return function (A) {
-    var _objectSpread3;
+    var _objectSpread2$1;
 
-    return _objectSpread2((_objectSpread3 = {}, _defineProperty(_objectSpread3, A.readAll, {
-      saga:
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function saga() {
-        return regeneratorRuntime.wrap(function saga$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return sagaApi.get("/".concat(name), A.readAllSuccess, A.readAllFail, A.readAllDone);
+    return _objectSpread2((_objectSpread2$1 = {}, _defineProperty(_objectSpread2$1, A.readAll,
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee() {
+      return regeneratorRuntime.wrap(function _callee$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return sagaApi.get("/".concat(name), A.readAllSuccess, A.readAllFail, A.readAllDone);
 
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
+            case 2:
+            case "end":
+              return _context2.stop();
           }
-        }, saga);
-      }),
-      taker: takers.readAll
-    }), _defineProperty(_objectSpread3, A.readOne, {
-      saga:
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function saga(_ref2) {
-        var id;
-        return regeneratorRuntime.wrap(function saga$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                id = _ref2.payload;
-                _context3.next = 3;
-                return sagaApi.get("/".concat(name, "/").concat(id), A.readOneSuccess, A.readOneFail, A.readOneDone);
+        }
+      }, _callee);
+    })), _defineProperty(_objectSpread2$1, A.readOne,
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee2(_ref2) {
+      var id;
+      return regeneratorRuntime.wrap(function _callee2$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              id = _ref2.payload;
+              _context3.next = 3;
+              return sagaApi.get("/".concat(name, "/").concat(id), A.readOneSuccess, A.readOneFail, A.readOneDone);
 
-              case 3:
-              case "end":
-                return _context3.stop();
-            }
+            case 3:
+            case "end":
+              return _context3.stop();
           }
-        }, saga);
-      }),
-      taker: takers.readOne
-    }), _defineProperty(_objectSpread3, A.create, {
-      saga:
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function saga(_ref3) {
-        var payload;
-        return regeneratorRuntime.wrap(function saga$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                payload = _ref3.payload;
-                _context4.next = 3;
-                return sagaApi.post("/".concat(name), payload, A.createSuccess, A.createFail, A.createDone);
+        }
+      }, _callee2);
+    })), _defineProperty(_objectSpread2$1, A.create,
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee3(_ref3) {
+      var payload;
+      return regeneratorRuntime.wrap(function _callee3$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              payload = _ref3.payload;
+              _context4.next = 3;
+              return sagaApi.post("/".concat(name), payload, A.createSuccess, A.createFail, A.createDone);
 
-              case 3:
-              case "end":
-                return _context4.stop();
-            }
+            case 3:
+            case "end":
+              return _context4.stop();
           }
-        }, saga);
-      }),
-      taker: takers.create
-    }), _defineProperty(_objectSpread3, A.update, {
-      saga:
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function saga(_ref4) {
-        var payload, id, changeset;
-        return regeneratorRuntime.wrap(function saga$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                payload = _ref4.payload;
-                id = payload.id, changeset = payload.changeset;
-                _context5.next = 4;
-                return sagaApi.put("/".concat(name, "/").concat(id), changeset, A.updateSuccess, A.updateFail, A.updateDone);
+        }
+      }, _callee3);
+    })), _defineProperty(_objectSpread2$1, A.update,
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee4(_ref4) {
+      var payload, id, changeset;
+      return regeneratorRuntime.wrap(function _callee4$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              payload = _ref4.payload;
+              id = payload.id, changeset = payload.changeset;
+              _context5.next = 4;
+              return sagaApi.put("/".concat(name, "/").concat(id), changeset, A.updateSuccess, A.updateFail, A.updateDone);
 
-              case 4:
-              case "end":
-                return _context5.stop();
-            }
+            case 4:
+            case "end":
+              return _context5.stop();
           }
-        }, saga);
-      }),
-      taker: takers.update
-    }), _defineProperty(_objectSpread3, A.patch, {
-      saga:
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function saga(_ref5) {
-        var payload, id, changeset;
-        return regeneratorRuntime.wrap(function saga$(_context6) {
-          while (1) {
-            switch (_context6.prev = _context6.next) {
-              case 0:
-                payload = _ref5.payload;
-                id = payload.id, changeset = payload.changeset;
-                _context6.next = 4;
-                return sagaApi.patch("/".concat(name, "/").concat(id), changeset, A.patchSuccess, A.patchFail, A.patchDone);
+        }
+      }, _callee4);
+    })), _defineProperty(_objectSpread2$1, A.patch,
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee5(_ref5) {
+      var payload, id, changeset;
+      return regeneratorRuntime.wrap(function _callee5$(_context6) {
+        while (1) {
+          switch (_context6.prev = _context6.next) {
+            case 0:
+              payload = _ref5.payload;
+              id = payload.id, changeset = payload.changeset;
+              _context6.next = 4;
+              return sagaApi.patch("/".concat(name, "/").concat(id), changeset, A.patchSuccess, A.patchFail, A.patchDone);
 
-              case 4:
-              case "end":
-                return _context6.stop();
-            }
+            case 4:
+            case "end":
+              return _context6.stop();
           }
-        }, saga);
-      }),
-      taker: takers.patch
-    }), _defineProperty(_objectSpread3, A["delete"], {
-      saga:
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function saga(_ref6) {
-        var id;
-        return regeneratorRuntime.wrap(function saga$(_context7) {
-          while (1) {
-            switch (_context7.prev = _context7.next) {
-              case 0:
-                id = _ref6.payload;
-                _context7.next = 3;
-                return sagaApi["delete"]("/".concat(name, "/").concat(id), null, A.deleteSuccess, A.deleteFail, A.deleteDone);
+        }
+      }, _callee5);
+    })), _defineProperty(_objectSpread2$1, A["delete"],
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee6(_ref6) {
+      var id;
+      return regeneratorRuntime.wrap(function _callee6$(_context7) {
+        while (1) {
+          switch (_context7.prev = _context7.next) {
+            case 0:
+              id = _ref6.payload;
+              _context7.next = 3;
+              return sagaApi["delete"]("/".concat(name, "/").concat(id), null, A.deleteSuccess, A.deleteFail, A.deleteDone);
 
-              case 3:
-              case "end":
-                return _context7.stop();
-            }
+            case 3:
+            case "end":
+              return _context7.stop();
           }
-        }, saga);
-      }),
-      taker: takers["delete"]
-    }), _objectSpread3), extend ? extend(A) : {});
+        }
+      }, _callee6);
+    })), _objectSpread2$1), extend ? extend(A) : {});
   };
 };
 
@@ -538,55 +511,6 @@ var crudReducers = function crudReducers() {
     deleteDone: noop
   } : {}, {}, extend);
 };
-/**
- * Creates saga actions for async functions. This includes the
- * `success`, `fail,` and optional `done` actions to use in
- * the function's lifecycle.
- *
- * Accepts custom reducers via the `reducers` object where you
- * pass `{ main, success, fail, done }`. All are optional, `done`
- * will only be created if passed `true` or a reducer function.
- * Reducer options fallback to the following reducer helpers:
- * - main: `loadingReducer`
- * - success: `silentSuccessReducer`
- * - fail: `failReduver`
- * - done: `noop`
- *
- * @function
- * @param {string} name name of action
- * @param {object} reducers object of reducers
- * @param {function} reducers.main main reducer created from name argument as `name`
- * @param {function} reducers.success success reducer created from name argument as `nameSuccess`
- * @param {function} reducers.fail fail reducer created from name argument as `nameFail`
- * @param {(function|boolean)} reducers.done optional done reducer is boolean or reducer function create as `nameDone`
- *
- * @returns {object} object of reducer functions
- *
- * @example
- *
- * const {
- *     getTodo,
- *     getTodoSuccess,
- *     getTodoFail,
- *     getTodoDone
- * } = lifecycleReducers('getTodo', {
- *     success: (state, payload) => state.data = payload,
- *     done: true
- * })
- */
-
-var lifecycleReducers = function lifecycleReducers(name) {
-  var _rdxs;
-
-  var reducers = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  var rdxs = (_rdxs = {}, _defineProperty(_rdxs, name, reducers.main || loadingReducer), _defineProperty(_rdxs, "".concat(name, "Success"), reducers.success || notLoadingReducer), _defineProperty(_rdxs, "".concat(name, "Fail"), reducers.fail || failReducer), _rdxs);
-
-  if (reducers.done) {
-    rdxs["".concat(name, "Done")] = reducers.done instanceof Function ? reducers.done : noop;
-  }
-
-  return rdxs;
-};
 
 /**
  * Cancellable request caller. Implements a cancel-able api to
@@ -632,7 +556,7 @@ var makeRequest = function makeRequest(instance, method, path) {
   return request;
 };
 /**
- * @typedef ApiHelper
+ * @typedef AxiosWrapperInstance
  * @property {function} get perform get request
  * @property {function} post perform post request
  * @property {function} put perform put request
@@ -649,7 +573,7 @@ var makeRequest = function makeRequest(instance, method, path) {
  *
  * @param {object} options Axios options
  *
- * @returns {ApiHelper} An API for making cancellable xhr calls and other simple configurations
+ * @returns {AxiosWrapperInstance} An API for making cancellable xhr calls and other simple configurations
  */
 
 
@@ -781,7 +705,7 @@ var isFunction = function isFunction(fn) {
  * @param {any} payload Request payload
  * @param {function} success Success action
  * @param {function} fail Fail action
- * @param {function} done Done action
+ * @param {function} done? Done action
  */
 
 
@@ -970,14 +894,14 @@ var createApis = function createApis(options) {
 /**
  * Creates a saga slice with opinionated CRUD functionality
  * @function
- * @param {object} options Options to pass to saga helper
+ * @arg {object} options Options to pass to saga helper
  * @param {string} options.name Required. Slice name
  * @param {string} options.singular Required. Singular resource name
  * @param {string} options.plural Required. Plural resource name
  * @param {object} options.sagaApi Required. Saga API instance
- * @param {object} options.initialState Extra initial state values
- * @param {object} options.reducers Extra reducers
- * @param {function} options.sagas Extra sagas
+ * @param {object} options.initialState Extra initial state values or overrides
+ * @param {object} options.reducers Extra reducers or overrides
+ * @param {function} options.sagas Extra sagas or overrides
  *
  * @return {SagaSlice} A saga slice module
  *
@@ -1035,4 +959,4 @@ var crudSlice = function crudSlice(opts) {
   });
 };
 
-export { createApis, createSuccess, crudInitialState, crudReducers, crudSaga, crudSlice, deleteSuccess, failReducer, lifecycleReducers, loadingReducer, noop, notLoadingReducer, readAllSuccess, readOneSuccess, refetch, resetCurrent, setCurrent, updateSuccess };
+export { createApis, createSuccess, crudInitialState, crudReducers, crudSaga, crudSlice, deleteSuccess, failReducer, loadingReducer, noop, notLoadingReducer, readAllSuccess, readOneSuccess, refetch, resetCurrent, setCurrent, updateSuccess };

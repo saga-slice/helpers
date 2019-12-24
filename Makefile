@@ -11,7 +11,10 @@ docs:
 	@ ${jsdoc2md} index.js > docs/crudSlice.md
 
 build:
+	@ npm run ts
 	@ npm run build
+	@ mv tmp/lib/*.ts dist
+	@ rm -rf tmp
 
 test:
 	@ npm run lint

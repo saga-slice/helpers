@@ -6,14 +6,14 @@ import { crudReducers, crudInitialState } from './lib/reducerHelpers';
 /**
  * Creates a saga slice with opinionated CRUD functionality
  * @function
- * @param {object} options Options to pass to saga helper
+ * @arg {object} options Options to pass to saga helper
  * @param {string} options.name Required. Slice name
  * @param {string} options.singular Required. Singular resource name
  * @param {string} options.plural Required. Plural resource name
  * @param {object} options.sagaApi Required. Saga API instance
- * @param {object} options.initialState Extra initial state values
- * @param {object} options.reducers Extra reducers
- * @param {function} options.sagas Extra sagas
+ * @param {object} options.initialState Extra initial state values or overrides
+ * @param {object} options.reducers Extra reducers or overrides
+ * @param {function} options.sagas Extra sagas or overrides
  *
  * @return {SagaSlice} A saga slice module
  *
