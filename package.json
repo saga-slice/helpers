@@ -1,6 +1,6 @@
 {
   "name": "saga-slice-helpers",
-  "version": "0.1.6",
+  "version": "1.0.0",
   "description": "Opinionated helpers for working with saga-slice library",
   "scripts": {
     "test": "jest --passWithNoTests --runInBand",
