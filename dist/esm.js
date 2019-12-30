@@ -58,9 +58,9 @@ function _objectSpread2(target) {
  * refresh a resource after an association or other out of context action.
  * This function is debounced by 100ms default to prevent api spam.
  *
- * @param {object} A Actions object
- * @param {string} name Name of state scope to grab current
- * @param {number} delay Debounce time
+ * @arg {object} A Actions object
+ * @arg {string} name Name of state scope to grab current
+ * @arg {number} delay Debounce time
  *
  * @returns {object} An object to add to a saga slice
  *
@@ -129,11 +129,11 @@ function refetch(A, name) {
 /**
  * Creates crud saga boilerplate clojure for sagas slice
  * @function
- * @param {object} options Options to pass to saga helper
+ * @arg {object} options Options to pass to saga helper
  * @param {string} options.name REST resource name
  * @param {string} options.takers Optional object of takers (defaults to `takeEvery`). Can be string `takeLatest`.
  * @param {string} options.sagaApi A `sagaApi` instance
- * @param {function} extend A function to pass actions and add extra sagas
+ * @arg {function} extend A function to pass actions and add extra sagas
  *
  * @return {function} Function that accepts redux actions object
  *
@@ -287,8 +287,8 @@ var crudSaga = function crudSaga() {
 /**
  * Handles mapping a successful fetch into IDs
  * @function
- * @param {*} state Mutable draft state from immer
- * @param {*} payload Action payload
+ * @arg {*} state Mutable draft state from immer
+ * @arg {*} payload Action payload
  */
 var readAllSuccess = function readAllSuccess(state, payload) {
   state.isLoading = false;
@@ -299,8 +299,8 @@ var readAllSuccess = function readAllSuccess(state, payload) {
 /**
  * Handles fetching a single item
  * @function
- * @param {*} state Mutable draft state from immer
- * @param {*} payload Action payload
+ * @arg {*} state Mutable draft state from immer
+ * @arg {*} payload Action payload
  */
 
 var readOneSuccess = function readOneSuccess(state, payload) {
@@ -310,8 +310,8 @@ var readOneSuccess = function readOneSuccess(state, payload) {
 /**
  * Handles creating a single item
  * @function
- * @param {*} state Mutable draft state from immer
- * @param {*} payload Action payload
+ * @arg {*} state Mutable draft state from immer
+ * @arg {*} payload Action payload
  */
 
 var createSuccess = function createSuccess(state, payload) {
@@ -321,8 +321,8 @@ var createSuccess = function createSuccess(state, payload) {
 /**
  * Handles updating a single item
  * @function
- * @param {*} state Mutable draft state from immer
- * @param {*} payload Action payload
+ * @arg {*} state Mutable draft state from immer
+ * @arg {*} payload Action payload
  */
 
 var updateSuccess = function updateSuccess(state, payload) {
@@ -332,8 +332,8 @@ var updateSuccess = function updateSuccess(state, payload) {
 /**
  * Handles deleting a single item
  * @function
- * @param {*} state Mutable draft state from immer
- * @param {*} payload Action payload
+ * @arg {*} state Mutable draft state from immer
+ * @arg {*} payload Action payload
  */
 
 var deleteSuccess = function deleteSuccess(state, payload) {
@@ -343,8 +343,8 @@ var deleteSuccess = function deleteSuccess(state, payload) {
 /**
  * Handles fail actions
  * @function
- * @param {*} state Mutable draft state from immer
- * @param {*} payload Action payload
+ * @arg {*} state Mutable draft state from immer
+ * @arg {*} payload Action payload
  */
 
 var failReducer = function failReducer(state, error) {
@@ -354,8 +354,8 @@ var failReducer = function failReducer(state, error) {
 /**
  * Handles setting loading state when fetching
  * @function
- * @param {*} state Mutable draft state from immer
- * @param {*} payload Action payload
+ * @arg {*} state Mutable draft state from immer
+ * @arg {*} payload Action payload
  */
 
 var loadingReducer = function loadingReducer(state) {
@@ -364,8 +364,8 @@ var loadingReducer = function loadingReducer(state) {
 /**
  * Handles unsetting loading state without manipulate other aspects of state
  * @function
- * @param {*} state Mutable draft state from immer
- * @param {*} payload Action payload
+ * @arg {*} state Mutable draft state from immer
+ * @arg {*} payload Action payload
  */
 
 var notLoadingReducer = function notLoadingReducer(state) {
@@ -376,8 +376,8 @@ var notLoadingReducer = function notLoadingReducer(state) {
  * and need to maintain that screen's context. Payload accepts
  * an Object to set as current; Number or String as id to set from data.
  * @function
- * @param {*} state Mutable draft state from immer
- * @param {*} payload Action payload
+ * @arg {*} state Mutable draft state from immer
+ * @arg {*} payload Action payload
  */
 
 var setCurrent = function setCurrent(state, payload) {
@@ -392,8 +392,8 @@ var setCurrent = function setCurrent(state, payload) {
 /**
  * Set current item to null
  * @function
- * @param {*} state Mutable draft state from immer
- * @param {*} payload Action payload
+ * @arg {*} state Mutable draft state from immer
+ * @arg {*} payload Action payload
  */
 
 var resetCurrent = function resetCurrent(state) {
@@ -408,7 +408,7 @@ var noop = function noop() {};
 /**
  * Creates an opinionated initial state for handling common CRUD operates
  * @function
- * @param {object} extend Extra state parameters
+ * @arg {object} extend Extra state parameters
  * @returns {object} Initial state object
  *
  * @example
@@ -434,8 +434,8 @@ var crudInitialState = function crudInitialState(extend) {
 /**
  * Creates an opinionated reducer object for handling common CRUD operates
  * @function
- * @param {object} extend Extra state parameters
- * @param {boolean} done Flag to create `done` actions / reducers
+ * @arg {object} extend Extra state parameters
+ * @arg {boolean} done Flag to create `done` actions / reducers
  * @returns {object} Reducer object for saga slice
  *
  * @example
@@ -511,6 +511,55 @@ var crudReducers = function crudReducers() {
     deleteDone: noop
   } : {}, {}, extend);
 };
+/**
+ * Creates saga actions for async functions. This includes the
+ * `success`, `fail,` and optional `done` actions to use in
+ * the function's lifecycle.
+ *
+ * Accepts custom reducers via the `reducers` object where you
+ * pass `{ main, success, fail, done }`. All are optional, `done`
+ * will only be created if passed `true` or a reducer function.
+ * Reducer options fallback to the following reducer helpers:
+ * - main: `loadingReducer`
+ * - success: `silentSuccessReducer`
+ * - fail: `failReduver`
+ * - done: `noop`
+ *
+ * @function
+ * @arg {string} name name of action
+ * @arg {object} reducers object of reducers
+ * @param {function} reducers.main main reducer created from name argument as `name`
+ * @param {function} reducers.success success reducer created from name argument as `nameSuccess`
+ * @param {function} reducers.fail fail reducer created from name argument as `nameFail`
+ * @param {(function|boolean)} reducers.done optional done reducer is boolean or reducer function create as `nameDone`
+ *
+ * @returns {object} object of reducer functions
+ *
+ * @example
+ *
+ * const {
+ *     getTodo,
+ *     getTodoSuccess,
+ *     getTodoFail,
+ *     getTodoDone
+ * } = lifecycleReducers('getTodo', {
+ *     success: (state, payload) => state.data = payload,
+ *     done: true
+ * })
+ */
+
+var lifecycleReducers = function lifecycleReducers(name) {
+  var _rdxs;
+
+  var reducers = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var rdxs = (_rdxs = {}, _defineProperty(_rdxs, name, reducers.main || loadingReducer), _defineProperty(_rdxs, "".concat(name, "Success"), reducers.success || notLoadingReducer), _defineProperty(_rdxs, "".concat(name, "Fail"), reducers.fail || failReducer), _rdxs);
+
+  if (reducers.done) {
+    rdxs["".concat(name, "Done")] = reducers.done instanceof Function ? reducers.done : noop;
+  }
+
+  return rdxs;
+};
 
 /**
  * Cancellable request caller. Implements a cancel-able api to
@@ -520,11 +569,11 @@ var crudReducers = function crudReducers() {
  * When the method is a `GET`, the argument `payload` becomes `options`
  * https://github.com/redux-saga/redux-saga/issues/651#issuecomment-262375964
  *
- * @param {object} instance Instance of Axios via `axios.create()`
- * @param {string} method Request Method
- * @param {string} path Request URL path
- * @param {*} payload Request payload. Optional if method is GET.
- * @param {object} options Axios options
+ * @arg {object} instance Instance of Axios via `axios.create()`
+ * @arg {string} method Request Method
+ * @arg {string} path Request URL path
+ * @arg {*} payload Request payload. Optional if method is GET.
+ * @arg {object} options Axios options
  */
 
 var makeRequest = function makeRequest(instance, method, path) {
@@ -560,18 +609,20 @@ var makeRequest = function makeRequest(instance, method, path) {
  * @property {function} get perform get request
  * @property {function} post perform post request
  * @property {function} put perform put request
+ * @property {function} patch perform patch request
  * @property {function} delete perform delete request
  * @property {function} addAuthorization add bearer token auth header
  * @property {function} removeAuthorization remove bearer token auth header
  * @property {function} addHeader adds a header
  * @property {function} removeHeader remove a header
+ * @property {AxiosInstance} instance axios instance created by `axios.create`
  */
 
 /**
  * API creator builds an Axios API that uses a cancellable request caller.
  * Accepts default Axios options
  *
- * @param {object} options Axios options
+ * @arg {object} options Axios options
  *
  * @returns {AxiosWrapperInstance} An API for making cancellable xhr calls and other simple configurations
  */
@@ -618,47 +669,47 @@ var AxiosWrapper = (function () {
   return {
     /**
      * @function get
-     * @param {string} path Request URL path
-     * @param options Axios options
+     * @arg {string} path Request URL path
+     * @arg options Axios options
      */
     get: makeRequest.bind(makeRequest, instance, 'get'),
 
     /**
      * @function put
-     * @param path Request URL path
-     * @param payload Request payload
-     * @param options Axios options
+     * @arg path Request URL path
+     * @arg payload Request payload
+     * @arg options Axios options
      */
     put: makeRequest.bind(makeRequest, instance, 'put'),
 
     /**
      * @function patch
-     * @param path Request URL path
-     * @param payload Request payload
-     * @param options Axios options
+     * @arg path Request URL path
+     * @arg payload Request payload
+     * @arg options Axios options
      */
     patch: makeRequest.bind(makeRequest, instance, 'patch'),
 
     /**
      * @function post
-     * @param path Request URL path
-     * @param payload Request payload
-     * @param options Axios options
+     * @arg path Request URL path
+     * @arg payload Request payload
+     * @arg options Axios options
      */
     post: makeRequest.bind(makeRequest, instance, 'post'),
 
     /**
      * @function delete
-     * @param path Request URL path
-     * @param payload Request payload
-     * @param options Axios options
+     * @arg path Request URL path
+     * @arg payload Request payload
+     * @arg options Axios options
      */
     "delete": makeRequest.bind(makeRequest, instance, 'delete'),
 
     /**
      * Sets authorization header on axios instance
      * @function addAuthorization
-     * @param {string} token Bearer auth token
+     * @arg {string} token Bearer auth token
      */
     addAuthorization: addAuthorization,
 
@@ -671,15 +722,15 @@ var AxiosWrapper = (function () {
     /**
      * Adds a header value
      * @function addHeader
-     * @param {string} name header name
-     * @param {string} value header value
+     * @arg {string} name header name
+     * @arg {string} value header value
      */
     addHeader: addHeader,
 
     /**
      * Removes a header value
      * @function removeHeader
-     * @param {string} name header name
+     * @arg {string} name header name
      */
     removeHeader: removeHeader,
 
@@ -699,13 +750,13 @@ var isFunction = function isFunction(fn) {
 };
 /**
  * Generator function that wraps an API call within a try catch.
- * @param {object} instance Cancellable axios instances
- * @param {string} method Request method
- * @param {string} path URL Path
- * @param {any} payload Request payload
- * @param {function} success Success action
- * @param {function} fail Fail action
- * @param {function} done? Done action
+ * @arg {object} instance Cancellable axios instances
+ * @arg {string} method Request method
+ * @arg {string} path URL Path
+ * @arg {any} payload Request payload
+ * @arg {function} success Success action
+ * @arg {function} fail Fail action
+ * @arg {function} done? Done action
  */
 
 
@@ -811,11 +862,20 @@ function makeCall(instance, method, path) {
   }, _marked, null, [[11, 21]]);
 }
 /**
+ * @typedef SagaApiInstance
+ * @property {function} get perform get request
+ * @property {function} post perform post request
+ * @property {function} put perform put request
+ * @property {function} patch perform patch request
+ * @property {function} delete perform delete request
+ */
+
+/**
  * Creates an object with generators that make API calls
  * using the passed `instance`.
  *
- * @param {object} instance Cancellable axios instance
- * @returns {object} API generators for saga calls
+ * @arg {object} instance Cancellable axios instance
+ * @returns {SagaApiInstance} API generators for saga calls
  */
 
 
@@ -824,54 +884,54 @@ var SagaApi = (function (instance) {
     /**
      * Wrapper for makeCall.bind(makeCall, instance, 'get'),
      * @generator
-     * @param {string} path Request URL path
-     * @param {function} successAction Redux action to dispatch on success
-     * @param {function} failAction Redux action to dispatch on fail
-     * @param {function} [doneAction=undefined] Redux action to dispatch when completed
+     * @arg {string} path Request URL path
+     * @arg {function} successAction Redux action to dispatch on success
+     * @arg {function} failAction Redux action to dispatch on fail
+     * @arg {function} [doneAction=undefined] Redux action to dispatch when completed
      */
     get: makeCall.bind(makeCall, instance, 'get'),
 
     /**
      * Wrapper for makeCall.bind(makeCall, instance, 'post'),
      * @generator
-     * @param {string} path Request URL path
-     * @param {*} payload Request payload
-     * @param {function} successAction Redux action to dispatch on success
-     * @param {function} failAction Redux action to dispatch on fail
-     * @param {function} [doneAction=undefined] Redux action to dispatch when completed
+     * @arg {string} path Request URL path
+     * @arg {*} payload Request payload
+     * @arg {function} successAction Redux action to dispatch on success
+     * @arg {function} failAction Redux action to dispatch on fail
+     * @arg {function} [doneAction=undefined] Redux action to dispatch when completed
      */
     post: makeCall.bind(makeCall, instance, 'post'),
 
     /**
      * Wrapper for makeCall.bind(makeCall, instance, 'put'),
      * @generator
-     * @param {string} path Request URL path
-     * @param {*} payload Request payload
-     * @param {function} successAction Redux action to dispatch on success
-     * @param {function} failAction Redux action to dispatch on fail
-     * @param {function} [doneAction=undefined] Redux action to dispatch when completed
+     * @arg {string} path Request URL path
+     * @arg {*} payload Request payload
+     * @arg {function} successAction Redux action to dispatch on success
+     * @arg {function} failAction Redux action to dispatch on fail
+     * @arg {function} [doneAction=undefined] Redux action to dispatch when completed
      */
     put: makeCall.bind(makeCall, instance, 'put'),
 
     /**
      * Wrapper for makeCall.bind(makeCall, instance, 'patch'),
      * @generator
-     * @param {string} path Request URL path
-     * @param {*} payload Request payload
-     * @param {function} successAction Redux action to dispatch on success
-     * @param {function} failAction Redux action to dispatch on fail
-     * @param {function} [doneAction=undefined] Redux action to dispatch when completed
+     * @arg {string} path Request URL path
+     * @arg {*} payload Request payload
+     * @arg {function} successAction Redux action to dispatch on success
+     * @arg {function} failAction Redux action to dispatch on fail
+     * @arg {function} [doneAction=undefined] Redux action to dispatch when completed
      */
     patch: makeCall.bind(makeCall, instance, 'patch'),
 
     /**
      * Wrapper for makeCall.bind(makeCall, instance, 'delete'),
      * @generator
-     * @param {string} path Request URL path
-     * @param {*} payload Request payload
-     * @param {function} successAction Redux action to dispatch on success
-     * @param {function} failAction Redux action to dispatch on fail
-     * @param {function} [doneAction=undefined] Redux action to dispatch when completed
+     * @arg {string} path Request URL path
+     * @arg {*} payload Request payload
+     * @arg {function} successAction Redux action to dispatch on success
+     * @arg {function} failAction Redux action to dispatch on fail
+     * @arg {function} [doneAction=undefined] Redux action to dispatch when completed
      */
     "delete": makeCall.bind(makeCall, instance, 'delete')
   };
@@ -880,7 +940,7 @@ var SagaApi = (function (instance) {
 /**
  * Creates cancellable axios API and a saga API
  * @function
- * @param {object} options Axios configuration
+ * @arg {object} options Axios configuration
  */
 
 var createApis = function createApis(options) {
@@ -959,4 +1019,4 @@ var crudSlice = function crudSlice(opts) {
   });
 };
 
-export { createApis, createSuccess, crudInitialState, crudReducers, crudSaga, crudSlice, deleteSuccess, failReducer, loadingReducer, noop, notLoadingReducer, readAllSuccess, readOneSuccess, refetch, resetCurrent, setCurrent, updateSuccess };
+export { createApis, createSuccess, crudInitialState, crudReducers, crudSaga, crudSlice, deleteSuccess, failReducer, lifecycleReducers, loadingReducer, noop, notLoadingReducer, readAllSuccess, readOneSuccess, refetch, resetCurrent, setCurrent, updateSuccess };

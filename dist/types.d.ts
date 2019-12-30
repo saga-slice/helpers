@@ -23,11 +23,13 @@ interface makeRequest {
  * @property {function} get perform get request
  * @property {function} post perform post request
  * @property {function} put perform put request
+ * @property {function} patch perform patch request
  * @property {function} delete perform delete request
  * @property {function} addAuthorization add bearer token auth header
  * @property {function} removeAuthorization remove bearer token auth header
  * @property {function} addHeader adds a header
  * @property {function} removeHeader remove a header
+ * @property {AxiosInstance} instance axios instance created by `axios.create`
  */
 interface AxiosWrapperInstance {
     get: makeRequest;
@@ -70,7 +72,7 @@ interface SagaApiInstance {
 /**
  * Creates cancellable axios API and a saga API
  * @function
- * @param {AxiosRequestConfig} options Axios configuration
+ * @arg {AxiosRequestConfig} options Axios configuration
  */
 export declare const createApis: (options: AxiosRequestConfig) => {
     api: AxiosWrapperInstance;
@@ -81,9 +83,9 @@ export declare const createApis: (options: AxiosRequestConfig) => {
  * refresh a resource after an association or other out of context action.
  * This function is debounced by 100ms default to prevent api spam.
  *
- * @param {object} A Actions object
- * @param {string} name Name of state scope to grab current
- * @param {number} delay Debounce time
+ * @arg {object} A Actions object
+ * @arg {string} name Name of state scope to grab current
+ * @arg {number} delay Debounce time
  *
  * @returns {object} An object to add to a saga slice
  *
@@ -198,7 +200,7 @@ export declare const resetCurrent: reducerFunction;
 /**
  * Creates an opinionated initial state for handling common CRUD operates
  * @function
- * @param {object} extend Extra state parameters
+ * @arg {object} extend Extra state parameters
  * @returns {object} Initial state object
  *
  * @example
@@ -251,8 +253,8 @@ interface CrudReducersInstance {
 /**
  * Creates an opinionated reducer object for handling common CRUD operates
  * @function
- * @param {object} extend Extra state parameters
- * @param {boolean} done Flag to create `done` actions / reducers
+ * @arg {object} extend Extra state parameters
+ * @arg {boolean} done Flag to create `done` actions / reducers
  * @returns {CrudReducersInstance} Reducer object for saga slice
  *
  * @example
@@ -295,6 +297,49 @@ interface CrudReducersInstance {
  * } = actions;
  */
 export declare const crudReducers: (extend: anyObject, done?: boolean) => typeof extend & CrudReducersInstance;
+interface LifecycleReducerOpts {
+    main: reducerFunction;
+    success: reducerFunction;
+    fail: reducerFunction;
+    done?: reducerFunction | boolean;
+}
+/**
+ * Creates saga actions for async functions. This includes the
+ * `success`, `fail,` and optional `done` actions to use in
+ * the function's lifecycle.
+ *
+ * Accepts custom reducers via the `reducers` object where you
+ * pass `{ main, success, fail, done }`. All are optional, `done`
+ * will only be created if passed `true` or a reducer function.
+ * Reducer options fallback to the following reducer helpers:
+ * - main: `loadingReducer`
+ * - success: `silentSuccessReducer`
+ * - fail: `failReduver`
+ * - done: `noop`
+ *
+ * @function
+ * @arg {string} name name of action
+ * @arg {LifecycleReducerOpts} reducers object of reducers
+ * @param {function} reducers.main main reducer created from name argument as `name`
+ * @param {function} reducers.success success reducer created from name argument as `nameSuccess`
+ * @param {function} reducers.fail fail reducer created from name argument as `nameFail`
+ * @param {(function|boolean)} reducers.done optional done reducer is boolean or reducer function create as `nameDone`
+ *
+ * @returns {object} object of reducer functions
+ *
+ * @example
+ *
+ * const {
+ *     getTodo,
+ *     getTodoSuccess,
+ *     getTodoFail,
+ *     getTodoDone
+ * } = lifecycleReducers('getTodo', {
+ *     success: (state, payload) => state.data = payload,
+ *     done: true
+ * })
+ */
+export declare const lifecycleReducers: (name: string, reducers: LifecycleReducerOpts) => anyObject;
 /**
  * Creates a saga slice with opinionated CRUD functionality
  * @function
