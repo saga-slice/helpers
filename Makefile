@@ -25,8 +25,7 @@ deploy:
 	@ read -p 'Commit Message: ' commitMessage; \
 		git add .; \
 		git commit -am "$$commitMessage";
-	@ npm run test
-	@ read -p 'Version Bump (major, minor, patch): ' versionBump; \
-		npm version $$versionBump;
+	@ npm run test;
+	@ npm run release;
 	@ npm publish;
-	@ git push origin master;
+	@ git push origin master --no-verify;

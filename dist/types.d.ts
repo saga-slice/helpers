@@ -313,17 +313,13 @@ interface LifecycleReducerOpts {
  * will only be created if passed `true` or a reducer function.
  * Reducer options fallback to the following reducer helpers:
  * - main: `loadingReducer`
- * - success: `silentSuccessReducer`
- * - fail: `failReduver`
+ * - success: `notLoadingReducer`
+ * - fail: `failReducer`
  * - done: `noop`
  *
  * @function
  * @arg {string} name name of action
  * @arg {LifecycleReducerOpts} reducers object of reducers
- * @param {function} reducers.main main reducer created from name argument as `name`
- * @param {function} reducers.success success reducer created from name argument as `nameSuccess`
- * @param {function} reducers.fail fail reducer created from name argument as `nameFail`
- * @param {(function|boolean)} reducers.done optional done reducer is boolean or reducer function create as `nameDone`
  *
  * @returns {object} object of reducer functions
  *
