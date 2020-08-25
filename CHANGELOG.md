@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.1](https://github.com/damusix/saga-slice-helpers/compare/v2.0.0...v2.0.1) (2020-08-25)
+
+
+### Bug Fixes
+
+* window.location is undefined in react native ([4b7e6da](https://github.com/damusix/saga-slice-helpers/commit/4b7e6da173fdd02aa98c31fec12aa7ae04373100))
+
 ## 2.0.0 (2020-08-25)
 
 
