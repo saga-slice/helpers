@@ -35,7 +35,7 @@ cancel the previous request before calling again.</p>
 <dt><a href="#addHeader">addHeader(name, value)</a></dt>
 <dd><p>Adds a header value</p>
 </dd>
-<dt><a href="#removeAuthorization">removeAuthorization(name)</a></dt>
+<dt><a href="#removeHeader">removeHeader(name)</a></dt>
 <dd><p>Removes a header value</p>
 </dd>
 </dl>
@@ -43,7 +43,7 @@ cancel the previous request before calling again.</p>
 ## Typedefs
 
 <dl>
-<dt><a href="#ApiHelper">ApiHelper</a></dt>
+<dt><a href="#AxiosWrapperInstance">AxiosWrapperInstance</a></dt>
 <dd></dd>
 </dl>
 
@@ -156,9 +156,9 @@ Adds a header value
 | name | <code>string</code> | header name |
 | value | <code>string</code> | header value |
 
-<a name="removeAuthorization"></a>
+<a name="removeHeader"></a>
 
-## removeAuthorization(name)
+## removeHeader(name)
 Removes a header value
 
 **Kind**: global function  
@@ -167,9 +167,9 @@ Removes a header value
 | --- | --- | --- |
 | name | <code>string</code> | header name |
 
-<a name="ApiHelper"></a>
+<a name="AxiosWrapperInstance"></a>
 
-## ApiHelper
+## AxiosWrapperInstance
 **Kind**: global typedef  
 **Properties**
 
@@ -178,9 +178,11 @@ Removes a header value
 | get | <code>function</code> | perform get request |
 | post | <code>function</code> | perform post request |
 | put | <code>function</code> | perform put request |
+| patch | <code>function</code> | perform patch request |
 | delete | <code>function</code> | perform delete request |
 | addAuthorization | <code>function</code> | add bearer token auth header |
 | removeAuthorization | <code>function</code> | remove bearer token auth header |
 | addHeader | <code>function</code> | adds a header |
 | removeHeader | <code>function</code> | remove a header |
+| instance | <code>AxiosInstance</code> | axios instance created by `axios.create` |
 

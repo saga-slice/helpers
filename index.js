@@ -8,7 +8,7 @@ import {
     isFunction,
     isNotEmpty,
     isNotUndefined
-} from './helpers';
+} from './lib/helpers';
 
 /**
  * Creates a saga slice with opinionated CRUD functionality
@@ -64,6 +64,7 @@ export const crudSlice = (opts) => {
     // Required
     affirm(isNotEmpty(name) && isString(name), 'must provide a valid name');
     affirm(isObject(sagaApi), 'must provide a valid sagaApi');
+    affirm(isFunction(sagaApi.get), 'must provide a valid sagaApi');
 
     // Optional
     [
@@ -71,7 +72,7 @@ export const crudSlice = (opts) => {
         [initialState, isObject(initialState), 'initialState must be an object'],
         [sagas, isFunction(sagas), 'sagas must be a function'],
         [takers, isObject(takers) || isString(takers), 'takers must be an object or "takeEvery"'],
-    ].forEach((val, ...args) => {
+    ].forEach(([val, ...args]) => {
 
         isNotUndefined(val) && affirm(...args);
     })

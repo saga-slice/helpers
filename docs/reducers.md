@@ -52,7 +52,7 @@ will only be created if passed <code>true</code> or a reducer function.
 Reducer options fallback to the following reducer helpers:</p>
 <ul>
 <li>main: <code>loadingReducer</code></li>
-<li>success: <code>silentSuccessReducer</code></li>
+<li>success: <code>notLoadingReducer</code></li>
 <li>fail: <code>failReduver</code></li>
 <li>done: <code>noop</code></li>
 </ul>
@@ -273,7 +273,7 @@ pass `{ main, success, fail, done }`. All are optional, `done`
 will only be created if passed `true` or a reducer function.
 Reducer options fallback to the following reducer helpers:
 - main: `loadingReducer`
-- success: `silentSuccessReducer`
+- success: `notLoadingReducer`
 - fail: `failReduver`
 - done: `noop`
 
@@ -283,11 +283,7 @@ Reducer options fallback to the following reducer helpers:
 | Param | Type | Description |
 | --- | --- | --- |
 | name | <code>string</code> | name of action |
-| reducers | <code>object</code> | object of reducers |
-| reducers.main | <code>function</code> | main reducer created from name argument as `name` |
-| reducers.success | <code>function</code> | success reducer created from name argument as `nameSuccess` |
-| reducers.fail | <code>function</code> | fail reducer created from name argument as `nameFail` |
-| reducers.done | <code>function</code> \| <code>boolean</code> | optional done reducer is boolean or reducer function create as `nameDone` |
+| reducers | <code>LifecycleReducerOpts</code> | object of reducers |
 
 **Example**  
 ```js

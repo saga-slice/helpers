@@ -5,6 +5,10 @@ const { crudSlice } = SagaSliceHelpers;
 
 const SagaSlice = createModule({ name: 'test', reducers: {}, initialState: {} }).constructor;
 
+const stub = {
+    sagaApi: { get: () => {} }
+};
+
 describe('saga slice helpers', () => {
 
     test('it should export all helpers', () => {
@@ -66,7 +70,7 @@ describe('saga slice helpers', () => {
 
             expect(() => crudSlice({
                 name: 'yes',
-                sagaApi: {},
+                sagaApi: stub.sagaApi,
                 reducers
             })).toThrow('reducers must be an object');
         });
@@ -75,7 +79,7 @@ describe('saga slice helpers', () => {
 
             expect(() => crudSlice({
                 name: 'yes',
-                sagaApi: {},
+                sagaApi: stub.sagaApi,
                 initialState
             })).toThrow('initialState must be an object');
         });
@@ -89,7 +93,7 @@ describe('saga slice helpers', () => {
 
             expect(() => crudSlice({
                 name: 'yes',
-                sagaApi: {},
+                sagaApi: stub.sagaApi,
                 initialState: {},
                 takers
             })).toThrow('takers must be an object or "takeEvery"');
@@ -102,7 +106,7 @@ describe('saga slice helpers', () => {
 
             expect(() => crudSlice({
                 name: 'yes',
-                sagaApi: {},
+                sagaApi: stub.sagaApi,
                 sagas
             })).toThrow('sagas must be a function');
         });
@@ -112,7 +116,7 @@ describe('saga slice helpers', () => {
 
         const slice = crudSlice({
             name: 'test',
-            sagaApi: {}
+            sagaApi: stub.sagaApi
         });
 
         expect(slice instanceof SagaSlice).toBe(true);
@@ -144,7 +148,7 @@ describe('saga slice helpers', () => {
 
         const slice = crudSlice({
             name: 'test',
-            sagaApi: {},
+            sagaApi: stub.sagaApi,
             reducers: {
                 test: () => {},
                 test2: () => {}
@@ -160,7 +164,7 @@ describe('saga slice helpers', () => {
 
         expect(() => crudSlice({
             name: 'test',
-            sagaApi: {},
+            sagaApi: stub.sagaApi,
             initialState: { test: true }
         })).not.toThrow();
     });
@@ -169,7 +173,7 @@ describe('saga slice helpers', () => {
 
         expect(() => crudSlice({
             name: 'test',
-            sagaApi: {},
+            sagaApi: stub.sagaApi,
             sagas: () => ({ test: () => {} })
         })).not.toThrow();
     });
@@ -178,7 +182,7 @@ describe('saga slice helpers', () => {
 
         expect(() => crudSlice({
             name: 'test',
-            sagaApi: {},
+            sagaApi: stub.sagaApi,
             takers: {
                 readAll: () => {}
             }
@@ -187,7 +191,7 @@ describe('saga slice helpers', () => {
 
         expect(() => crudSlice({
             name: 'test',
-            sagaApi: {},
+            sagaApi: stub.sagaApi,
             takers: 'takeLatest'
         })).not.toThrow();
     });

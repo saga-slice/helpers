@@ -13,9 +13,9 @@ Creates a saga slice with opinionated CRUD functionality
 | options.singular | <code>string</code> | Required. Singular resource name |
 | options.plural | <code>string</code> | Required. Plural resource name |
 | options.sagaApi | <code>object</code> | Required. Saga API instance |
-| options.initialState | <code>object</code> | Extra initial state values |
-| options.reducers | <code>object</code> | Extra reducers |
-| options.sagas | <code>function</code> | Extra sagas |
+| options.initialState | <code>object</code> | Extra initial state values or overrides |
+| options.reducers | <code>object</code> | Extra reducers or overrides |
+| options.sagas | <code>function</code> | Extra sagas or overrides |
 
 **Example**  
 ```js

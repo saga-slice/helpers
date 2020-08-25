@@ -21,9 +21,16 @@
 ## Functions
 
 <dl>
-<dt><a href="#makeCall">makeCall(instance, method, path, payload, success, fail, done)</a></dt>
+<dt><a href="#makeCall">makeCall(instance, method, path, payload, success, fail, done?)</a></dt>
 <dd><p>Generator function that wraps an API call within a try catch.</p>
 </dd>
+</dl>
+
+## Typedefs
+
+<dl>
+<dt><a href="#SagaApiInstance">SagaApiInstance</a></dt>
+<dd></dd>
 </dl>
 
 <a name="get"></a>
@@ -102,7 +109,7 @@ Wrapper for makeCall.bind(makeCall, instance, 'delete'),
 
 <a name="makeCall"></a>
 
-## makeCall(instance, method, path, payload, success, fail, done)
+## makeCall(instance, method, path, payload, success, fail, done?)
 Generator function that wraps an API call within a try catch.
 
 **Kind**: global function  
@@ -115,5 +122,19 @@ Generator function that wraps an API call within a try catch.
 | payload | <code>any</code> | Request payload |
 | success | <code>function</code> | Success action |
 | fail | <code>function</code> | Fail action |
-| done | <code>function</code> | Done action |
+| done? | <code>function</code> | Done action |
+
+<a name="SagaApiInstance"></a>
+
+## SagaApiInstance
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| get | <code>function</code> | perform get request |
+| post | <code>function</code> | perform post request |
+| put | <code>function</code> | perform put request |
+| patch | <code>function</code> | perform patch request |
+| delete | <code>function</code> | perform delete request |
 

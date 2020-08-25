@@ -2,13 +2,33 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
-var assert = _interopDefault(require('assert'));
 var sagaSlice = require('saga-slice');
 var effects = require('redux-saga/effects');
 var axios = require('axios');
 var reduxSaga = require('redux-saga');
+
+/**
+ * Assertation function for type checking
+ * @param {boolean} affirmative Thing to assert
+ * @param {string} message Message to pass to error
+ */
+const affirm = (affirmative, message = '') => {
+    if (!affirmative) {
+        throw new Error(message);
+    }
+};
+
+const isFunction = (val) => typeof val === 'function';
+const isString = (val) => typeof val === 'string';
+const isNotEmpty = (val) => val && val.length;
+const isNotUndefined = (val) => typeof val !== 'undefined';
+
+const isObject = (val) => (
+    val !== null &&
+    val !== undefined &&
+    val.constructor !== Array &&
+    typeof val === 'object'
+);
 
 /**
  * Fetchings whatever is in `state.current` again in order to
@@ -91,13 +111,13 @@ const crudSaga = (opts = {}, extend) => {
 
     const { name, sagaApi } = opts;
 
-    assert(
-        !!name && name.constructor === String,
+    affirm(
+        isString(name),
         'options.name: the resource\'s REST name is required'
     );
 
-    assert(
-        !!sagaApi && sagaApi.constructor === Object,
+    affirm(
+        isObject(sagaApi),
         'options.sagaApi: API object is required'
     );
 
@@ -142,7 +162,7 @@ const crudSaga = (opts = {}, extend) => {
  */
 const readAllSuccess = (state, payload) => {
 
-    state.isLoading = false;
+    state.isFetching = false;
     state.data = Object.values(payload || {})
         .reduce((a, c) => ({
             ...a,
@@ -158,7 +178,7 @@ const readAllSuccess = (state, payload) => {
  */
 const readOneSuccess = (state, payload) => {
 
-    state.isLoading = false;
+    state.isFetching = false;
     state.data[payload.id] = {
         ...(state.data[payload.id] || {}),
         ...payload
@@ -173,7 +193,7 @@ const readOneSuccess = (state, payload) => {
  */
 const createSuccess = (state, payload) => {
 
-    state.isLoading = false;
+    state.isFetching = false;
     state.data[payload.id] = payload;
 };
 
@@ -185,7 +205,7 @@ const createSuccess = (state, payload) => {
  */
 const updateSuccess = (state, payload) => {
 
-    state.isLoading = false;
+    state.isFetching = false;
     state.data[payload.id] = {
         ...(state.data[payload.id] || {}),
         ...payload
@@ -200,7 +220,7 @@ const updateSuccess = (state, payload) => {
  */
 const deleteSuccess = (state, payload) => {
 
-    state.isLoading = false;
+    state.isFetching = false;
     delete state.data[payload.id];
 };
 
@@ -213,7 +233,7 @@ const deleteSuccess = (state, payload) => {
  */
 const failReducer = (state, error) => {
 
-    state.isLoading = false;
+    state.isFetching = false;
     state.error = error;
 };
 
@@ -225,7 +245,7 @@ const failReducer = (state, error) => {
  */
 const loadingReducer = state => {
 
-    state.isLoading = true;
+    state.isFetching = true;
 };
 
 /**
@@ -236,7 +256,7 @@ const loadingReducer = state => {
  */
 const notLoadingReducer = state => {
 
-    state.isLoading = false;
+    state.isFetching = false;
 };
 
 
@@ -297,7 +317,7 @@ const noop = () => {};
  */
 const crudInitialState = extend => ({
 
-    isLoading: false,
+    isFetching: false,
     current: null,
     data: {},
     error: null,
@@ -421,6 +441,21 @@ const crudReducers = (extend = {}, done) => ({
  */
 const lifecycleReducers = (name, reducers = {}) => {
 
+    affirm(isString(name) && isNotEmpty(name), 'name must be a valid string');
+    affirm(isObject(reducers), 'reducers must be an object');
+
+    [
+        'main',
+        'success',
+        'fail'
+    ].forEach(key => {
+
+        isNotUndefined(reducers[key]) && (
+            affirm(isFunction(reducers[key]), `reducers.${key} must be a function`)
+        );
+    });
+
+
     const rdxs = {
         [name]: reducers.main || loadingReducer,
         [`${name}Success`]: reducers.success || notLoadingReducer,
@@ -428,7 +463,7 @@ const lifecycleReducers = (name, reducers = {}) => {
     };
 
     if (reducers.done) {
-        rdxs[`${name}Done`] = reducers.done instanceof Function ? reducers.done : noop;
+        rdxs[`${name}Done`] = isFunction(reducers.done) ? reducers.done : noop;
     }
 
     return rdxs;
@@ -623,12 +658,6 @@ var AxiosWrapper = (options = {}) => {
     };
 };
 
-// works for generators, functions, and custom function types (jest)
-const isFunction = (fn) => !!fn &&
-    fn.constructor === Function &&
-    fn.call.constructor === Function
-;
-
 /**
  * Generator function that wraps an API call within a try catch.
  * @arg {object} instance Cancellable axios instances
@@ -646,8 +675,8 @@ function* makeCall(instance, method, path, ...args) {
     // However, in the condition that the method is a "get",
     // then we want to omit "payload" and instead have
     // the 3rd and 4th arguments be actions
-    assert(method.constructor === String, 'valid method required');
-    assert(!!path && path.constructor === String, 'valid path required');
+    affirm(isString(method), 'valid method required');
+    affirm(isString(path), 'valid path required');
 
     const callArgs = [instance[method], path];
 
@@ -663,11 +692,11 @@ function* makeCall(instance, method, path, ...args) {
     // last argument is an optional `done` action
     const done = args.shift();
 
-    assert(!!success && isFunction(success), 'success must be a function');
-    assert(!!fail && isFunction(fail), 'fail must be a function');
+    affirm(isFunction(success), 'success must be a function');
+    affirm(isFunction(fail), 'fail must be a function');
 
     // validate not exist or is a function
-    assert(!done || isFunction(done), 'done must be a function');
+    isNotUndefined(done) && affirm(isFunction(done), 'done must be a function');
 
     let donePayload;
 
@@ -840,14 +869,20 @@ const crudSlice = (opts) => {
     } = opts;
 
     // Required
-    assert(!!name && name.constructor === String, 'must provide a valid name');
-    assert(!!sagaApi && sagaApi.constructor === Object, 'must provide a valid sagaApi');
+    affirm(isNotEmpty(name) && isString(name), 'must provide a valid name');
+    affirm(isObject(sagaApi), 'must provide a valid sagaApi');
+    affirm(isFunction(sagaApi.get), 'must provide a valid sagaApi');
 
     // Optional
-    assert(!reducers || (reducers && reducers.constructor === Object), 'reducers must be an object');
-    assert(!initialState || (initialState && initialState.constructor === Object), 'initialState must be an object');
-    assert(!sagas || (sagas && sagas.constructor === Function), 'sagas must be a function');
-    assert(!takers || (takers && [Object, String].includes(takers.constructor)), 'takers must be an object or "takeEvery"');
+    [
+        [reducers, isObject(reducers), 'reducers must be an object'],
+        [initialState, isObject(initialState), 'initialState must be an object'],
+        [sagas, isFunction(sagas), 'sagas must be a function'],
+        [takers, isObject(takers) || isString(takers), 'takers must be an object or "takeEvery"'],
+    ].forEach(([val, ...args]) => {
+
+        isNotUndefined(val) && affirm(...args);
+    });
 
     return sagaSlice.createModule({
         name,

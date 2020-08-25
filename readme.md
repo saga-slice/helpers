@@ -133,7 +133,7 @@ declare const crudSaga: (opts: SagaApiOpts, extend: ExtendSagasFn) => {
  */
 declare const crudInitialState: {
     (extend: anyObject): typeof extend & {
-        isLoading: boolean;
+        isFetching: boolean;
         current: any;
         data: anyObject;
         error: any;
