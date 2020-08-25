@@ -537,7 +537,7 @@ var AxiosWrapper = (options = {}) => {
 
     // Default options
     options = {
-        baseURL: window.location.hostname,
+        baseURL: (window.location || {}).hostname || 'http://axios.baseURL.not.set',
         timeout: 5000,
         ...options,
         headers: {
