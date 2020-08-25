@@ -1,7 +1,14 @@
-import assert from 'assert';
 import { createModule } from 'saga-slice';
-import { crudSaga } from './lib/sagaHelpers';
-import { crudReducers, crudInitialState } from './lib/reducerHelpers';
+import { crudSaga } from './lib/sagas';
+import { crudReducers, crudInitialState } from './lib/reducers';
+import {
+    affirm,
+    isString,
+    isObject,
+    isFunction,
+    isNotEmpty,
+    isNotUndefined
+} from './helpers';
 
 /**
  * Creates a saga slice with opinionated CRUD functionality
@@ -55,14 +62,19 @@ export const crudSlice = (opts) => {
     } = opts;
 
     // Required
-    assert(!!name && name.constructor === String, 'must provide a valid name');
-    assert(!!sagaApi && sagaApi.constructor === Object, 'must provide a valid sagaApi');
+    affirm(isNotEmpty(name) && isString(name), 'must provide a valid name');
+    affirm(isObject(sagaApi), 'must provide a valid sagaApi');
 
     // Optional
-    assert(!reducers || (reducers && reducers.constructor === Object), 'reducers must be an object');
-    assert(!initialState || (initialState && initialState.constructor === Object), 'initialState must be an object');
-    assert(!sagas || (sagas && sagas.constructor === Function), 'sagas must be a function');
-    assert(!takers || (takers && [Object, String].includes(takers.constructor)), 'takers must be an object or "takeEvery"');
+    [
+        [reducers, isObject(reducers), 'reducers must be an object'],
+        [initialState, isObject(initialState), 'initialState must be an object'],
+        [sagas, isFunction(sagas), 'sagas must be a function'],
+        [takers, isObject(takers) || isString(takers), 'takers must be an object or "takeEvery"'],
+    ].forEach((val, ...args) => {
+
+        isNotUndefined(val) && affirm(...args);
+    })
 
     return createModule({
         name,
@@ -77,5 +89,5 @@ export const crudSlice = (opts) => {
 };
 
 export * from './lib/api/index';
-export * from './lib/reducerHelpers';
-export * from './lib/sagaHelpers';
+export * from './lib/reducers';
+export * from './lib/sagas';

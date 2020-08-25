@@ -5,7 +5,7 @@
   "scripts": {
     "test": "jest --passWithNoTests --runInBand",
     "tdd": "npm run test -- --watch",
-    "lint": "eslint lib",
+    "lint": "eslint .",
     "build": "rollup -c",
     "docs": "rm -rf docs; make docs;",
     "ts": "tsc",
@@ -61,7 +61,7 @@
     "typescript": "^3.7.4"
   },
   "peerDependencies": {
-    "saga-slice": "^1.1.x",
+    "saga-slice": "^1.x.x",
     "axios": "^0.x.x",
     "redux-saga": "^1.x.x"
   },
